@@ -7,13 +7,13 @@ import java.util.Date;
 import java.util.List;
 
 public interface IDB_Manager {
-    public List<Driver> GetNamesTheDrivers();
-    public void AddDriver(Driver driver);
-    public List<Travel> UntreatedTravels();
-    public List<Travel> EndedTravels();
-    public List<Travel> TravelByDriver(Driver driver);
-    public List<Travel> UntreatedTravelsInDestinationCity(String city);
-    public List<Travel> UntreatedTravelsByDistance(double distance, Location location);
-    public List<Travel> TravelByDate(Date date);
-    public List<Travel> TravelByPayment(double payment);
+    public List<Driver> getTheNamesOfDrivers();
+    public void addDriver(Driver driver);
+    public List<Travel> untreatedTravels();
+    public List<Travel> endedTravels();
+    public List<Travel> travelsByDriver(Driver driver);
+    public List<Travel> untreatedTravelsInDestinationCity(String city);
+    public List<Travel> untreatedTravelsByDistance(double distance, Location location);
+    public List<Travel> travelsByDate(Date date);
+    public List<Travel> travelsByPayment(double payment);
 }

@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">GetTexiD</string>
+    <string name="googleMapsAPI">AIzaSyCfxtFeOPR0_YiUnPTonaOTjvmBjs95E4E</string>
 </resources>

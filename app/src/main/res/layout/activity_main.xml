@@ -6,4 +6,13 @@
     android:layout_height="match_parent"
     tools:context=".controller.MainActivity">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/layout_bg_rounded"
+        android:minHeight="50dp"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="0dp"
+        tools:ignore="MissingConstraints" />
 </android.support.constraint.ConstraintLayout>
