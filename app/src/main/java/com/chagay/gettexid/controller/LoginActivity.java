@@ -19,6 +19,8 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+
+
     public void onClick(View v) {
         if (v.getId() == loginButton)
             saveSharedPreferences();
