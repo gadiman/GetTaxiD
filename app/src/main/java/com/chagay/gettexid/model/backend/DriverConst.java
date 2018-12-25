@@ -10,6 +10,8 @@ public class DriverConst {
     public static class DriverC {
         public static final String DRIVER_FIRST_NAME = "driverFirstName";
         public static final String DRIVER_LAST_NAME = "driverLastName";
+        public static final String DRIVER_USER_NAME = "driverUserName";
+        public static final String PASSWORD = "Password";
         public static final String DRIVER_PHONE_NUMBER = "driverPhoneNumber";
         public static final String DRIVER_ID = "driverID";
         public static final String DRIVER_EMAIL_ADDRESS = "driverEmailAddress";
@@ -24,6 +26,8 @@ public class DriverConst {
 
         contentValues.put( DriverConst.DriverC.DRIVER_FIRST_NAME, driver.getDriverFirstName() );
         contentValues.put( DriverConst.DriverC.DRIVER_LAST_NAME, driver.getDriverLastName() );
+        contentValues.put( DriverConst.DriverC.DRIVER_USER_NAME, driver.getDriverUserName() );
+        contentValues.put( DriverConst.DriverC.PASSWORD, driver.getPassword() );
         contentValues.put( DriverConst.DriverC.DRIVER_PHONE_NUMBER, driver.getDriverPhoneNumber() );
         contentValues.put( DriverConst.DriverC.DRIVER_ID, driver.getDriverID() );
         contentValues.put( DriverConst.DriverC.DRIVER_EMAIL_ADDRESS, driver.getDriverEmailAddress() );
@@ -38,6 +42,8 @@ public class DriverConst {
 
         driver.setDriverFirstName( contentValues.getAsString( DriverConst.DriverC.DRIVER_FIRST_NAME ) );
         driver.setDriverLastName( contentValues.getAsString( DriverConst.DriverC.DRIVER_LAST_NAME ) );
+        driver.setDriverUserName( contentValues.getAsString( DriverConst.DriverC.DRIVER_USER_NAME ) );
+        driver.setPassword( contentValues.getAsString( DriverConst.DriverC.PASSWORD ) );
         driver.setDriverPhoneNumber( contentValues.getAsString( DriverConst.DriverC.DRIVER_PHONE_NUMBER ) );
         driver.setDriverID( contentValues.getAsString( DriverConst.DriverC.DRIVER_ID ) );
         driver.setDriverEmailAddress( contentValues.getAsString( DriverConst.DriverC.DRIVER_EMAIL_ADDRESS ) );

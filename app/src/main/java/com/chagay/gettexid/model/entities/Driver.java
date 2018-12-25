@@ -6,6 +6,8 @@ public class Driver {
 
     String driverFirstName;
     String driverLastName;
+    String driverUserName;
+    String password;
     String driverPhoneNumber;
     String driverID;
     String driverEmailAddress;
@@ -13,16 +15,19 @@ public class Driver {
 
     //---------------------------------- Constructors ----------------------------------//
 
-    public Driver(String driverFirstName, String driverLastName, String driverPhoneNumber, String driverID, String driverEmailAddress, String creditCard) {
+    public Driver(String driverFirstName, String driverLastName, String driverUserName, String password, String driverPhoneNumber, String driverID, String driverEmailAddress, String creditCard) {
         this.driverFirstName = driverFirstName;
         this.driverLastName = driverLastName;
         this.driverPhoneNumber = driverPhoneNumber;
         this.driverID = driverID;
         this.driverEmailAddress = driverEmailAddress;
         this.creditCard = creditCard;
+        this.driverUserName = driverUserName;
+        this.password = password;
     }
 
-    public Driver(){}
+    public Driver() {
+    }
 
     //------------------------------- Getters and Setters ------------------------------//
 
@@ -40,6 +45,22 @@ public class Driver {
 
     public void setDriverLastName(String driverLastName) {
         this.driverLastName = driverLastName;
+    }
+
+    public String getDriverUserName() {
+        return driverUserName;
+    }
+
+    public void setDriverUserName(String driverUserName) {
+        this.driverUserName = driverUserName;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getDriverPhoneNumber() {
