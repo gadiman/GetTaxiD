@@ -4,12 +4,12 @@ public class Driver {
 
     //---------------------------------- Fields ------------------------------------------//
 
+    String driverID;
     String driverFirstName;
     String driverLastName;
     String driverUserName;
     String password;
     String driverPhoneNumber;
-    String driverID;
     String driverEmailAddress;
     String creditCard;
 

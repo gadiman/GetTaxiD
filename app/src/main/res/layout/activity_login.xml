@@ -11,23 +11,27 @@
         android:layout_marginLeft="50dp"
         android:layout_marginTop="50dp"
         android:text="Fill out the following fields:"
-        android:textSize="20dp" />
+        android:textSize="25dp" />
 
     <EditText
         android:id="@+id/nameEditText"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:layout_gravity="center"
         android:layout_marginTop="15dp"
+        android:background="@drawable/layout_edit_text_rounded"
+        android:drawableRight="@drawable/ic_person_black_24dp"
         android:ems="10"
         android:hint="Name" />
 
     <EditText
         android:id="@+id/passEditText"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:layout_gravity="center"
         android:layout_marginTop="15dp"
+        android:background="@drawable/layout_edit_text_rounded"
+        android:drawableRight="@drawable/ic_lock"
         android:ems="10"
         android:hint="Password"
         android:inputType="textPassword" />
@@ -47,7 +51,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="35dp"
-        android:background="@color/yellow"
+        android:background="@drawable/layout_button_color_rounded"
+        android:textColor="@color/blue_"
         android:text="Login" />
 
 
@@ -66,6 +71,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="15dp"
-        android:background="@color/yellow"
+        android:background="@drawable/layout_button_color_rounded"
+        android:textColor="@color/blue_"
         android:text="Sign up" />
 </LinearLayout>
