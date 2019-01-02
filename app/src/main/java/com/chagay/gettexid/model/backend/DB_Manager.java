@@ -6,9 +6,9 @@ import com.chagay.gettexid.model.entities.Travel;
 import java.util.Date;
 import java.util.List;
 
-public interface IDB_Manager {
+public interface DB_Manager {
     public List<Driver> getTheNamesOfDrivers();
-    public void addDriver(Driver driver);
+    public String addDriver(Driver driver);
     public List<Travel> untreatedTravels();
     public List<Travel> endedTravels();
     public List<Travel> travelsByDriver(Driver driver);
