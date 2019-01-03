@@ -15,15 +15,17 @@ public class Driver {
 
     //---------------------------------- Constructors ----------------------------------//
 
-    public Driver(String driverFirstName, String driverLastName, String driverUserName, String password, String driverPhoneNumber, String driverID, String driverEmailAddress, String creditCard) {
+    public Driver(String driverID, String driverFirstName, String driverLastName, String driverUserName, String password, String driverPhoneNumber,
+                  String driverEmailAddress, String creditCard) {
+        this.driverID = driverID;
         this.driverFirstName = driverFirstName;
         this.driverLastName = driverLastName;
-        this.driverPhoneNumber = driverPhoneNumber;
-        this.driverID = driverID;
-        this.driverEmailAddress = driverEmailAddress;
-        this.creditCard = creditCard;
         this.driverUserName = driverUserName;
         this.password = password;
+        this.driverPhoneNumber = driverPhoneNumber;
+        this.driverEmailAddress = driverEmailAddress;
+        this.creditCard = creditCard;
+
     }
 
     public Driver() {
