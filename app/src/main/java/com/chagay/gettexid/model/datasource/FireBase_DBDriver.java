@@ -124,29 +124,48 @@ public class FireBase_DBDriver implements DB_Manager{
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot,String s) {
+                Driver driver = dataSnapshot.getValue(Driver.class);
+                Long id = Long.parseLong(dataSnapshot.getKey());
+                for (int i = 0; i < DriverList.size(); i++) {
+                    if (DriverList.get(i).getId().equals(id)) {
+                        DriverList.set(i, driver);
+                        break;
+                    }
+                }
+                    notifyDataChange.onDataChanged(DriverList);
 
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
+                Driver driver = dataSnapshot.getValue(Driver.class);
+                Long id = Long.parseLong(dataSnapshot.getKey());
+                for (int i = 0; i < DriverList.size(); i++) {
+                    if (DriverList.get(i).getId()== id) {
+                        DriverList.remove(i);
+                        break;
+                    }
+                }
+                notifyDataChange.onDataChanged(DriverList);
 
             }
 
             @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) { }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                notifyDataChange.onFailure(databaseError.toException());
             }
         };
-
+        DriverRef.addChildEventListener(TravelRefChildEventListener);
     }
 
     public static void stopNotifyToDriversList() {
-
+        if (DriverRefChildEventListener != null) {
+            DriverRef.removeEventListener(DriverRefChildEventListener);
+            DriverRefChildEventListener = null;
+        }
     }
 
     @Override
