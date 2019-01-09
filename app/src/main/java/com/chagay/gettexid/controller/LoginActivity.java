@@ -12,7 +12,7 @@ import android.widget.Toast;
 
 import com.chagay.gettexid.R;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
     private EditText nameEditText;
     private EditText passEditText;
@@ -32,6 +32,8 @@ public class LoginActivity extends AppCompatActivity {
         signUpButton = (Button) findViewById( R.id.signUpButton );
         nameEditText = (EditText) findViewById( R.id.nameEditText );
         passEditText = (EditText) findViewById( R.id.passEditText );
+        loginButton.setOnClickListener(this);
+        signUpButton.setOnClickListener(this);
     }
 
 

@@ -12,6 +12,7 @@ public class Driver {
     String driverPhoneNumber;
     String driverEmailAddress;
     String creditCard;
+    long id;
 
     //---------------------------------- Constructors ----------------------------------//
 
@@ -95,6 +96,15 @@ public class Driver {
 
     public void setCreditCard(String creditCard) {
         this.creditCard = creditCard;
+    }
+
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
 }

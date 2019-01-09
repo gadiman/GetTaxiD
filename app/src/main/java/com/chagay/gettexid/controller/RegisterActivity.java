@@ -10,11 +10,10 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.chagay.gettexid.R;
-import com.chagay.gettexid.model.backend.DriverConst;
 import com.chagay.gettexid.model.backend.FactoryMethod;
 import com.chagay.gettexid.model.entities.Driver;
 
-public class RegisterActivity extends AppCompatActivity {
+public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
 
     private EditText driverID;
     private EditText driverFirstName;
@@ -46,6 +45,7 @@ public class RegisterActivity extends AppCompatActivity {
         driverEmailAddress = (EditText) findViewById( R.id.emailaddressEditText );
         creditCard = (EditText) findViewById( R.id.creditCardEditText );
         submitButton = (Button) findViewById( R.id.submitButton );
+        submitButton.setOnClickListener(this);
     }
 
     private void createOnChangeFocuseListeners() {
@@ -122,14 +122,14 @@ public class RegisterActivity extends AppCompatActivity {
                 String emailAddress = driverEmailAddress.getText().toString();
                 String _creditCard = creditCard.getText().toString();
 
-                final Driver add_driver = new Driver( id, firstName, lastName, userName, _password, numberPhone,
+                final Driver driver = new Driver( id, firstName, lastName, userName, _password, numberPhone,
                         emailAddress, _creditCard );
                 new AsyncTask<Void, Void, Boolean>(){
 
                     @Override
                     protected Boolean doInBackground(Void... voids) {
-                        String id= FactoryMethod.getManager().addDriver( DriverConst.DriverToContentValues(add_driver) );
-                        return FactoryMethod.getManager().checkIfTravelAdded(id);
+                        String id= FactoryMethod.getManager().addDriver(driver);
+                        return FactoryMethod.getManager().checkIfDriverAdded(id);
                     }
                     protected void onPostExecute(Boolean aBoolean) {
                         super.onPostExecute(aBoolean);

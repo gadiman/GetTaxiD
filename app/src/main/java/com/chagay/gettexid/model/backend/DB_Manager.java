@@ -9,8 +9,8 @@ import java.util.List;
 
 public interface DB_Manager {
     public List<Driver> getTheNamesOfDrivers();
-    public String addDriver(ContentValues driver);
-    public boolean checkIfTravelAdded(String id);
+    public String addDriver(Driver driver);
+    public boolean checkIfDriverAdded(String id);
     public List<Travel> untreatedTravels();
     public List<Travel> endedTravels();
     public List<Travel> travelsByDriver(Driver driver);

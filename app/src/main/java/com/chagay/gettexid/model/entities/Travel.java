@@ -13,6 +13,7 @@ public class Travel {
     private String customerName;
     private String customerPhoneNumber;
     private String customerEmailAddress;
+    private long  id;
 
     //---------------------------------- Constructors ----------------------------------//
 
@@ -94,6 +95,14 @@ public class Travel {
 
     public void setTravel_status(TRAVEL_STATUS travel_status) {
         this.travel_status = travel_status;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
 }
