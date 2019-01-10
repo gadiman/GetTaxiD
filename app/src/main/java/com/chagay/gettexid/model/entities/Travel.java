@@ -13,6 +13,12 @@ public class Travel {
     private String customerName;
     private String customerPhoneNumber;
     private String customerEmailAddress;
+    private String driverID;
+    private String destinetionCityName;
+    private double intialLocationLatitude;
+    private double initialLocationlongitude;
+    private double destinetionLatitude;
+    private double destinetionlongitude;
     private long  id;
 
     //---------------------------------- Constructors ----------------------------------//
@@ -104,6 +110,60 @@ public class Travel {
     public void setId(long id) {
         this.id = id;
     }
+
+
+    public String getDriverID() {
+        return driverID;
+    }
+
+    public void setDriverID(String driverID) {
+        this.driverID = driverID;
+    }
+
+
+    public String getDestinetionCityName() {
+        return destinetionCityName;
+    }
+
+    public void setDestinetionCityName(String city_name) {
+        this.destinetionCityName = city_name;
+    }
+
+    public double getIntialLocationLatitude() {
+        return intialLocationLatitude;
+    }
+
+    public void setIntialLocationLatitude(double intialLocationLatitude) {
+        this.intialLocationLatitude = intialLocationLatitude;
+    }
+
+    public double getInitialLocationlongitude() {
+        return initialLocationlongitude;
+    }
+
+    public void setInitialLocationlongitude(double initialLocationlongitude) {
+        this.initialLocationlongitude = initialLocationlongitude;
+    }
+
+
+    public double getDestinetionLatitude() {
+        return destinetionLatitude;
+    }
+
+    public void setDestinetionLatitude(double destinetionLatitude) {
+        this.destinetionLatitude = destinetionLatitude;
+    }
+
+    public double getDestinetionlongitude() {
+        return destinetionlongitude;
+    }
+
+    public void setDestinetionlongitude(double destinetionlongitude) {
+        this.destinetionlongitude = destinetionlongitude;
+    }
+
+
+
 
 }
 

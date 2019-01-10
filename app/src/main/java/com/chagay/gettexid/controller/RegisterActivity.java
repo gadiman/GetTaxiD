@@ -13,6 +13,8 @@ import com.chagay.gettexid.R;
 import com.chagay.gettexid.model.backend.FactoryMethod;
 import com.chagay.gettexid.model.entities.Driver;
 
+import java.util.List;
+import java.util.Map;
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
 
     private EditText driverID;
@@ -124,25 +126,41 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
                 final Driver driver = new Driver( id, firstName, lastName, userName, _password, numberPhone,
                         emailAddress, _creditCard );
-                new AsyncTask<Void, Void, Boolean>(){
+                if (!isDriverExists(id))
+                {
+                    new AsyncTask<Void, Void, Boolean>(){
 
-                    @Override
-                    protected Boolean doInBackground(Void... voids) {
-                        String id= FactoryMethod.getManager().addDriver(driver);
-                        return FactoryMethod.getManager().checkIfDriverAdded(id);
-                    }
-                    protected void onPostExecute(Boolean aBoolean) {
-                        super.onPostExecute(aBoolean);
-                        if (aBoolean)
-                            Toast.makeText(RegisterActivity.this, "Add to database successful", Toast.LENGTH_SHORT).show();
-                        else
-                            Toast.makeText(RegisterActivity.this, "Add to database not successful", Toast.LENGTH_SHORT).show();
-                    }
-                }.execute();
+                        @Override
+                        protected Boolean doInBackground(Void... voids) {
+                            String id= FactoryMethod.getManager().addDriver(driver);
+                            return FactoryMethod.getManager().checkIfDriverAdded(id);
+                        }
+                        protected void onPostExecute(Boolean aBoolean) {
+                            super.onPostExecute(aBoolean);
+                            if (aBoolean)
+                                Toast.makeText(RegisterActivity.this, "Add to database successful", Toast.LENGTH_SHORT).show();
+                            else
+                                Toast.makeText(RegisterActivity.this, "Add to database not successful", Toast.LENGTH_SHORT).show();
+                        }
+                    }.execute();
+                }
+                else
+                {
+                    Toast.makeText(RegisterActivity.this, "This driver already exists", Toast.LENGTH_SHORT).show();                }
             }
         }
     }
 
+
+    private boolean isDriverExists(String id){
+      List<Driver> drivers= FactoryMethod.getManager().getAllTheDrivers();
+        for (Driver it:drivers) {
+            if(it.getDriverID() == id){
+                return true;
+            }
+        }
+        return false;
+    }
 
     private boolean ValidateSubmitButton() {
         if (driverID.getText().toString().isEmpty() || driverFirstName.getText().toString().isEmpty() ||

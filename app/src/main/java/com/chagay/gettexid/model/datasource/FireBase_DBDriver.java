@@ -1,8 +1,10 @@
 package com.chagay.gettexid.model.datasource;
 
+import android.app.Activity;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import com.chagay.gettexid.model.backend.DB_Manager;
 import com.chagay.gettexid.model.entities.Driver;
@@ -11,37 +13,43 @@ import com.google.firebase.database.*;
 import com.google.firebase.database.FirebaseDatabase;
 
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 
-public class FireBase_DBDriver implements DB_Manager{
+public class  FireBase_DBDriver extends Activity implements DB_Manager  {
 
     public interface NotifyDataChange<T> {
         void onDataChanged(T obj);
+
         void onFailure(Exception exception);
     }
 
+
     static DatabaseReference TravelRef;
-    static  DatabaseReference DriverRef;
+    static DatabaseReference DriverRef;
     static List<Travel> TravelList;
     static List<Driver> DriverList;
+
     static {
-          FirebaseDatabase database = FirebaseDatabase.getInstance();
-          DriverRef = database.getReference( "Drivers" );
-          TravelRef = database.getReference("Travels");
-          TravelList = new ArrayList<>();
-          DriverList = new ArrayList<>();
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DriverRef = database.getReference("Drivers");
+        TravelRef = database.getReference("Travels");
+        TravelList = new ArrayList<>();
+        DriverList = new ArrayList<>();
+
     }
 
     private static ChildEventListener TravelRefChildEventListener;
     private static ChildEventListener DriverRefChildEventListener;
 
 
-    public static void NotifyToTravelsList(final NotifyDataChange<List<Travel>> notifyDataChange){
+    public static void NotifyToTravelsList(final NotifyDataChange<List<Travel>> notifyDataChange) {
 
-        if(notifyDataChange != null) {
+        if (notifyDataChange != null) {
 
             if (TravelRefChildEventListener != null) {
                 notifyDataChange.onFailure(new Exception("first unNotify Travel list"));
@@ -50,13 +58,12 @@ public class FireBase_DBDriver implements DB_Manager{
 
             TravelRefChildEventListener = new ChildEventListener() {
                 @Override
-                public void onChildAdded(@NonNull DataSnapshot dataSnapshot,  String s) {
+                public void onChildAdded(@NonNull DataSnapshot dataSnapshot, String s) {
                     Travel travel = dataSnapshot.getValue(Travel.class);
                     String id = dataSnapshot.getKey();
                     travel.setId(Long.parseLong(id));
                     TravelList.add(travel);
                     notifyDataChange.onDataChanged(TravelList);
-
 
                 }
 
@@ -90,7 +97,8 @@ public class FireBase_DBDriver implements DB_Manager{
                 }
 
                 @Override
-                public void onChildMoved(DataSnapshot dataSnapshot, String s) { }
+                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                }
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
@@ -102,7 +110,7 @@ public class FireBase_DBDriver implements DB_Manager{
         }
     }
 
-    public static void stopNotifyToTravelsList(){
+    public static void stopNotifyToTravelsList() {
         if (TravelRefChildEventListener != null) {
             TravelRef.removeEventListener(TravelRefChildEventListener);
             TravelRefChildEventListener = null;
@@ -110,11 +118,10 @@ public class FireBase_DBDriver implements DB_Manager{
     }
 
 
-
-    public static void NotifyToDriversList(final NotifyDataChange<List<Driver>> notifyDataChange){
+    public static void NotifyToDriversList(final NotifyDataChange<List<Driver>> notifyDataChange) {
         DriverRefChildEventListener = new ChildEventListener() {
             @Override
-            public void onChildAdded(DataSnapshot dataSnapshot,  String s) {
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Driver driver = dataSnapshot.getValue(Driver.class);
                 String id = dataSnapshot.getKey();
                 driver.setId(Long.parseLong(id));
@@ -123,7 +130,7 @@ public class FireBase_DBDriver implements DB_Manager{
             }
 
             @Override
-            public void onChildChanged(DataSnapshot dataSnapshot,String s) {
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 Driver driver = dataSnapshot.getValue(Driver.class);
                 Long id = Long.parseLong(dataSnapshot.getKey());
                 for (int i = 0; i < DriverList.size(); i++) {
@@ -132,7 +139,7 @@ public class FireBase_DBDriver implements DB_Manager{
                         break;
                     }
                 }
-                    notifyDataChange.onDataChanged(DriverList);
+                notifyDataChange.onDataChanged(DriverList);
 
             }
 
@@ -141,7 +148,7 @@ public class FireBase_DBDriver implements DB_Manager{
                 Driver driver = dataSnapshot.getValue(Driver.class);
                 Long id = Long.parseLong(dataSnapshot.getKey());
                 for (int i = 0; i < DriverList.size(); i++) {
-                    if (DriverList.get(i).getId()== id) {
+                    if (DriverList.get(i).getId() == id) {
                         DriverList.remove(i);
                         break;
                     }
@@ -151,7 +158,8 @@ public class FireBase_DBDriver implements DB_Manager{
             }
 
             @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) { }
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+            }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
@@ -169,8 +177,17 @@ public class FireBase_DBDriver implements DB_Manager{
     }
 
     @Override
-    public List<Driver> getTheNamesOfDrivers() {
-    return null;
+    public List<String> getTheNamesOfDrivers() {
+        List<String>namesOfDrivers = new ArrayList<>();
+        for (Driver it:DriverList) {
+            namesOfDrivers.add(it.getDriverFirstName());
+        }
+        return namesOfDrivers;
+    }
+
+    @Override
+    public List<Driver> getAllTheDrivers() {
+        return DriverList;
     }
 
 
@@ -181,13 +198,13 @@ public class FireBase_DBDriver implements DB_Manager{
 
     @Override
     public String addDriver(Driver driver) {
-        //create a new key for this driver
-        DatabaseReference DriverRef = FireBase_DBDriver.DriverRef.push();
+        //create a key for this driver based on DriverID
+        DatabaseReference DriverRef = FireBase_DBDriver.DriverRef.child(driver.getDriverID());
         //Insert the object to the FireBase
+
         DriverRef.setValue(driver);
-        //return the key for checking if the insert succeeded
-        return DriverRef.push().getKey();
-    }
+        return DriverRef.child(driver.getDriverID()).getKey();
+     }
 
     @Override
     public List<Travel> untreatedTravels() {
@@ -200,9 +217,8 @@ public class FireBase_DBDriver implements DB_Manager{
                 untreatedTravelList.add(it);
             }
         }
-            return untreatedTravelList;
+        return untreatedTravelList;
     }
-
 
 
     @Override
@@ -221,12 +237,26 @@ public class FireBase_DBDriver implements DB_Manager{
 
     @Override
     public List<Travel> travelsByDriver(Driver driver) {
-        return null;
+        List<Travel>travels = new ArrayList<>();
+        for (Travel it:TravelList) {
+            if(it.getDriverID() == driver.getDriverID()){
+                travels.add(it);
+            }
+        }
+        return travels;
     }
 
     @Override
     public List<Travel> untreatedTravelsInDestinationCity(String city) {
-        return null;
+        List<Travel> travels = new ArrayList<>();
+        for (Travel it:TravelList) {
+            if(it.getTravel_status() == Travel.TRAVEL_STATUS.AVAILABLE &&
+                    it.getDestinetionCityName() == city){
+                travels.add(it);
+            }
+
+        }
+        return travels;
     }
 
     @Override
@@ -243,4 +273,39 @@ public class FireBase_DBDriver implements DB_Manager{
     public List<Travel> travelsByPayment(double payment) {
         return null;
     }
+
+    public  void castStringToLocations(Travel travel){
+        Geocoder geoCoder = new Geocoder(getApplicationContext(), Locale.getDefault());
+        try
+        {
+            List<Address> addresses = geoCoder.getFromLocationName(travel.getStartLocation(), 5);
+            if (addresses != null && addresses.size() > 0)
+            {
+                Double lat = (double) (addresses.get(0).getLatitude());
+                Double lon = (double) (addresses.get(0).getLongitude());
+
+                Address address = addresses.get(0);
+                String city = address.getLocality();
+                travel.setIntialLocationLatitude(lat);
+                travel.setInitialLocationlongitude(lon);
+                travel.setDestinetionCityName(city);
+
+            }
+            List<Address> addresses_ = geoCoder.getFromLocationName(travel.getEndLocation(), 5);
+            if (addresses != null && addresses.size() > 0)
+            {
+                Double lat = (double) (addresses.get(0).getLatitude());
+                Double lon = (double) (addresses.get(0).getLongitude());
+
+                travel.setDestinetionLatitude(lat);
+                travel.setDestinetionlongitude(lon);
+
+            }
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
 }
