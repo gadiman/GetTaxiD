@@ -1,0 +1,63 @@
+{
+  "project_info": {
+    "project_number": "717855971999",
+    "firebase_url": "https://gettexiu-ea883.firebaseio.com",
+    "project_id": "gettexiu-ea883",
+    "storage_bucket": "gettexiu-ea883.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:717855971999:android:aa4b487ba93c6059",
+        "android_client_info": {
+          "package_name": "com.cohen.gad.gettexiu"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "717855971999-0p7v2aq08g0003sqsaj2f8ubq343t77h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cohen.gad.gettexiu",
+            "certificate_hash": "e250621715acb42f5816224c6646e1ac8124ff9a"
+          }
+        },
+        {
+          "client_id": "717855971999-1tosb4oenrcge7e07l5vih91vhc67rr2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cohen.gad.gettexiu",
+            "certificate_hash": "37ac1bd3aac542543dd50d69899ec27038034637"
+          }
+        },
+        {
+          "client_id": "717855971999-uq74q9v1igi4un84rpo7urseme2q6gal.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBW8G27T-m_HznESWkxcOAhUoBItwjflhg"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "717855971999-uq74q9v1igi4un84rpo7urseme2q6gal.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
