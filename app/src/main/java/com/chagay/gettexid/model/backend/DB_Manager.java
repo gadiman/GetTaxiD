@@ -8,7 +8,8 @@ import java.util.Date;
 import java.util.List;
 
 public interface DB_Manager {
-    public List<Driver> getTheNamesOfDrivers();
+    public List<String> getTheNamesOfDrivers();
+    public List<Driver> getAllTheDrivers();
     public String addDriver(Driver driver);
     public boolean checkIfDriverAdded(String id);
     public List<Travel> untreatedTravels();
