@@ -5,14 +5,11 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.support.annotation.NonNull;
-
 import com.chagay.gettexid.model.backend.DB_Manager;
 import com.chagay.gettexid.model.entities.Driver;
 import com.chagay.gettexid.model.entities.Travel;
 import com.google.firebase.database.*;
 import com.google.firebase.database.FirebaseDatabase;
-
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -24,10 +21,8 @@ public class  FireBase_DBDriver extends Activity implements DB_Manager  {
 
     public interface NotifyDataChange<T> {
         void onDataChanged(T obj);
-
         void onFailure(Exception exception);
     }
-
 
     static DatabaseReference TravelRef;
     static DatabaseReference DriverRef;
@@ -40,12 +35,10 @@ public class  FireBase_DBDriver extends Activity implements DB_Manager  {
         TravelRef = database.getReference("Travels");
         TravelList = new ArrayList<>();
         DriverList = new ArrayList<>();
-
     }
 
     private static ChildEventListener TravelRefChildEventListener;
     private static ChildEventListener DriverRefChildEventListener;
-
 
     public static void NotifyToTravelsList(final NotifyDataChange<List<Travel>> notifyDataChange) {
 

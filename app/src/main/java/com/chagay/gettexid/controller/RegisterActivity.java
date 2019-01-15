@@ -1,7 +1,9 @@
 package com.chagay.gettexid.controller;
 
 import android.annotation.SuppressLint;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -14,7 +16,8 @@ import com.chagay.gettexid.model.backend.FactoryMethod;
 import com.chagay.gettexid.model.entities.Driver;
 
 import java.util.List;
-import java.util.Map;
+
+
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
 
     private EditText driverID;
@@ -27,7 +30,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private EditText creditCard;
     private Button submitButton;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
@@ -35,7 +37,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         findViews();
         createOnChangeFocuseListeners();
     }
-
 
     private void findViews() {
         driverID = (EditText) findViewById( R.id.IDEditText );
@@ -47,7 +48,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         driverEmailAddress = (EditText) findViewById( R.id.emailaddressEditText );
         creditCard = (EditText) findViewById( R.id.creditCardEditText );
         submitButton = (Button) findViewById( R.id.submitButton );
-        submitButton.setOnClickListener(this);
+        submitButton.setOnClickListener( this );
     }
 
     private void createOnChangeFocuseListeners() {
@@ -55,10 +56,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-
                 if (!android.util.Patterns.EMAIL_ADDRESS.matcher( driverEmailAddress.getText().toString() ).matches()) {
                     driverEmailAddress.setError( "not valid email" );
-
                 }
             }
         } );
@@ -112,8 +111,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             if (!ValidateSubmitButton()) {
                 Toast.makeText( this, "Fill out all fields before submitting", Toast.LENGTH_SHORT ).show();
                 return;
-            }
-            else {
+            } else {
 
                 String id = driverID.getText().toString();
                 String firstName = driverFirstName.getText().toString();
@@ -126,36 +124,49 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
                 final Driver driver = new Driver( id, firstName, lastName, userName, _password, numberPhone,
                         emailAddress, _creditCard );
-                if (!isDriverExists(id))
-                {
-                    new AsyncTask<Void, Void, Boolean>(){
+                if (!isDriverExists( id )) {
+                    new AsyncTask<Void, Void, Boolean>() {
 
                         @Override
                         protected Boolean doInBackground(Void... voids) {
-                            String id= FactoryMethod.getManager().addDriver(driver);
-                            return FactoryMethod.getManager().checkIfDriverAdded(id);
+                            String id = FactoryMethod.getManager().addDriver( driver );
+                            return FactoryMethod.getManager().checkIfDriverAdded( id );
                         }
+
                         protected void onPostExecute(Boolean aBoolean) {
-                            super.onPostExecute(aBoolean);
-                            if (aBoolean)
-                                Toast.makeText(RegisterActivity.this, "Add to database successful", Toast.LENGTH_SHORT).show();
-                            else
-                                Toast.makeText(RegisterActivity.this, "Add to database not successful", Toast.LENGTH_SHORT).show();
+                            super.onPostExecute( aBoolean );
+                            if (aBoolean) {
+                                Toast.makeText( RegisterActivity.this, "Add to database successful", Toast.LENGTH_SHORT ).show();
+                                saveSharedPreferences( userName );
+                            } else
+                                Toast.makeText( RegisterActivity.this, "Add to database not successful", Toast.LENGTH_SHORT ).show();
                         }
                     }.execute();
+                } else {
+                    Toast.makeText( RegisterActivity.this, "This driver already exists", Toast.LENGTH_SHORT ).show();
                 }
-                else
-                {
-                    Toast.makeText(RegisterActivity.this, "This driver already exists", Toast.LENGTH_SHORT).show();                }
             }
         }
     }
 
 
-    private boolean isDriverExists(String id){
-      List<Driver> drivers= FactoryMethod.getManager().getAllTheDrivers();
-        for (Driver it:drivers) {
-            if(it.getDriverID() == id){
+    private void saveSharedPreferences(String userName) {
+        try {
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences( this );
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString( "USER", userName );
+            editor.commit();
+            Toast.makeText( this, "save Preferences", Toast.LENGTH_SHORT ).show();
+        } catch (Exception e) {
+            Toast.makeText( this, "not save Preferences", Toast.LENGTH_SHORT ).show();
+        }
+    }
+
+
+    private boolean isDriverExists(String id) {
+        List<Driver> drivers = FactoryMethod.getManager().getAllTheDrivers();
+        for (Driver it : drivers) {
+            if (it.getDriverID() == id) {
                 return true;
             }
         }

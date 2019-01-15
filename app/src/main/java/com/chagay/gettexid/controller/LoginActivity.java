@@ -9,8 +9,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
 import com.chagay.gettexid.R;
+import com.chagay.gettexid.model.backend.FactoryMethod;
+import com.chagay.gettexid.model.entities.Driver;
+
+import java.util.List;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -32,21 +35,54 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         signUpButton = (Button) findViewById( R.id.signUpButton );
         nameEditText = (EditText) findViewById( R.id.nameEditText );
         passEditText = (EditText) findViewById( R.id.passEditText );
-        loginButton.setOnClickListener(this);
-        signUpButton.setOnClickListener(this);
+        loginButton.setOnClickListener( this );
+        signUpButton.setOnClickListener( this );
     }
 
 
     public void onClick(View v) {
-        if (v == loginButton);
-            //saveSharedPreferences( nameEditText.text, passEditText.text );
-        else if (v == signUpButton) {
-            Intent registering = new Intent( LoginActivity.this, RegisterActivity.class );
-            startActivity(registering);
+        if (v == loginButton) {
+            String user = nameEditText.getText().toString();
+            String password = passEditText.getText().toString();
+            if (!ValidateloginButton()){
+                Toast.makeText( this, "Fill out all fields before submitting", Toast.LENGTH_SHORT ).show();
+                return;
+            }
+            if (!isDriverExists(user,password)){
+                Toast.makeText( this, "The Username or password is incorrect", Toast.LENGTH_SHORT ).show();
+                return;
+            }
+            else {
+                //saveSharedPreferences??????????
+                Intent mainIntent=new Intent( this,MainActivity.class );
+                finish();
+                startActivity( mainIntent );
+            }
+        } else if (v == signUpButton) {
+            Intent registering = new Intent( this, RegisterActivity.class );
+            finish();
+            startActivity( registering );
         }
     }
 
+    private boolean ValidateloginButton() {
+        if (nameEditText.getText().toString().isEmpty() || passEditText.getText().toString().isEmpty())
+            return false;
+        return true;
+    }
 
+
+    private boolean isDriverExists(String user, String pass){
+        List<Driver> drivers= FactoryMethod.getManager().getAllTheDrivers();
+        for (Driver it:drivers) {
+            if(it.getDriverUserName() == user&&it.getPassword()==pass){
+                return true;
+            }
+        }
+        return false;
+    }
+
+/*
     private void saveSharedPreferences(String name, String pass) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences( this );
         if (sharedPreferences.contains( "NAME" )) {
@@ -61,6 +97,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
 
 
-    }
+    }*/
 }
 
