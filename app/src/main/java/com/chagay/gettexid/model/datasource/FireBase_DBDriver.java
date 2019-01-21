@@ -1,8 +1,6 @@
 package com.chagay.gettexid.model.datasource;
 
 import android.app.Activity;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
 import android.support.annotation.NonNull;
 import com.chagay.gettexid.model.backend.DB_Manager;
@@ -10,24 +8,56 @@ import com.chagay.gettexid.model.entities.Driver;
 import com.chagay.gettexid.model.entities.Travel;
 import com.google.firebase.database.*;
 import com.google.firebase.database.FirebaseDatabase;
-import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 
 public class  FireBase_DBDriver extends Activity implements DB_Manager  {
 
+    public FireBase_DBDriver(){
+        NotifyToDriversList(new NotifyDataChange<List<Driver>>() {
+            @Override
+            public void onDataChanged(List<Driver> obj) {
+
+            }
+
+            @Override
+            public void onFailure(List<Driver> obj) {
+
+            }
+        });
+
+        NotifyToTravelsList(new NotifyDataChange<List<Travel>>() {
+            @Override
+            public void onDataChanged(List<Travel> obj) {
+
+            }
+
+            @Override
+            public void onFailure(List<Travel> obj) {
+
+            }
+        });
+
+    }
+
+
+
+
+
     public interface NotifyDataChange<T> {
         void onDataChanged(T obj);
-        void onFailure(Exception exception);
+        void onFailure(T obj );
     }
 
     static DatabaseReference TravelRef;
     static DatabaseReference DriverRef;
     static List<Travel> TravelList;
+    static List<Travel> FreeTravelList;
     static List<Driver> DriverList;
+
 
     static {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -35,26 +65,29 @@ public class  FireBase_DBDriver extends Activity implements DB_Manager  {
         TravelRef = database.getReference("Travels");
         TravelList = new ArrayList<>();
         DriverList = new ArrayList<>();
+        FreeTravelList = new ArrayList<>();
+
+
     }
 
     private static ChildEventListener TravelRefChildEventListener;
     private static ChildEventListener DriverRefChildEventListener;
 
-    public static void NotifyToTravelsList(final NotifyDataChange<List<Travel>> notifyDataChange) {
 
+    public static void NotifyToTravelsList(final NotifyDataChange<List<Travel>> notifyDataChange) {
         if (notifyDataChange != null) {
 
             if (TravelRefChildEventListener != null) {
-                notifyDataChange.onFailure(new Exception("first unNotify Travel list"));
+                notifyDataChange.onFailure(TravelList);
                 return;
             }
-
             TravelRefChildEventListener = new ChildEventListener() {
                 @Override
                 public void onChildAdded(@NonNull DataSnapshot dataSnapshot, String s) {
                     Travel travel = dataSnapshot.getValue(Travel.class);
                     String id = dataSnapshot.getKey();
-                    travel.setId(Long.parseLong(id));
+                    travel.setId(id);
+
                     TravelList.add(travel);
                     notifyDataChange.onDataChanged(TravelList);
 
@@ -64,7 +97,7 @@ public class  FireBase_DBDriver extends Activity implements DB_Manager  {
                 public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
                     Travel travel = dataSnapshot.getValue(Travel.class);
-                    Long id = Long.parseLong(dataSnapshot.getKey());
+                    String id = dataSnapshot.getKey();
                     travel.setId(id);
                     for (int i = 0; i < TravelList.size(); i++) {
                         if (TravelList.get(i).getId().equals(id)) {
@@ -78,7 +111,7 @@ public class  FireBase_DBDriver extends Activity implements DB_Manager  {
                 @Override
                 public void onChildRemoved(DataSnapshot dataSnapshot) {
                     Travel travel = dataSnapshot.getValue(Travel.class);
-                    Long id = Long.parseLong(dataSnapshot.getKey());
+                    String id = dataSnapshot.getKey();
                     travel.setId(id);
                     for (int i = 0; i < TravelList.size(); i++) {
                         if (TravelList.get(i).getId() == id) {
@@ -95,11 +128,11 @@ public class  FireBase_DBDriver extends Activity implements DB_Manager  {
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-                    notifyDataChange.onFailure(databaseError.toException());
+                    notifyDataChange.onFailure(null);
                 }
 
             };
-            TravelRef.addChildEventListener(TravelRefChildEventListener);
+                 TravelRef.addChildEventListener(TravelRefChildEventListener);
         }
     }
 
@@ -156,10 +189,10 @@ public class  FireBase_DBDriver extends Activity implements DB_Manager  {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                notifyDataChange.onFailure(databaseError.toException());
+                notifyDataChange.onFailure(null);
             }
         };
-        DriverRef.addChildEventListener(TravelRefChildEventListener);
+            DriverRef.addChildEventListener(DriverRefChildEventListener);
     }
 
     public static void stopNotifyToDriversList() {
@@ -168,6 +201,10 @@ public class  FireBase_DBDriver extends Activity implements DB_Manager  {
             DriverRefChildEventListener = null;
         }
     }
+
+
+
+
 
     @Override
     public List<String> getTheNamesOfDrivers() {
@@ -189,6 +226,8 @@ public class  FireBase_DBDriver extends Activity implements DB_Manager  {
         return id == FirebaseDatabase.getInstance().getReference("Drivers").child(id).getKey();
     }
 
+
+
     @Override
     public String addDriver(Driver driver) {
         //create a key for this driver based on DriverID
@@ -204,13 +243,14 @@ public class  FireBase_DBDriver extends Activity implements DB_Manager  {
         if (TravelList == null)
             return null;
 
-        List<Travel> untreatedTravelList = new ArrayList<>();
+        FreeTravelList.clear();
         for (Travel it : TravelList) {
             if (it.getTravel_status() == Travel.TRAVEL_STATUS.AVAILABLE) {
-                untreatedTravelList.add(it);
+                FreeTravelList.add(it);
             }
         }
-        return untreatedTravelList;
+
+        return FreeTravelList;
     }
 
 
@@ -267,38 +307,12 @@ public class  FireBase_DBDriver extends Activity implements DB_Manager  {
         return null;
     }
 
-    public  void castStringToLocations(Travel travel){
-        Geocoder geoCoder = new Geocoder(getApplicationContext(), Locale.getDefault());
-        try
-        {
-            List<Address> addresses = geoCoder.getFromLocationName(travel.getStartLocation(), 5);
-            if (addresses != null && addresses.size() > 0)
-            {
-                Double lat = (double) (addresses.get(0).getLatitude());
-                Double lon = (double) (addresses.get(0).getLongitude());
-
-                Address address = addresses.get(0);
-                String city = address.getLocality();
-                travel.setIntialLocationLatitude(lat);
-                travel.setInitialLocationlongitude(lon);
-                travel.setDestinetionCityName(city);
-
-            }
-            List<Address> addresses_ = geoCoder.getFromLocationName(travel.getEndLocation(), 5);
-            if (addresses != null && addresses.size() > 0)
-            {
-                Double lat = (double) (addresses.get(0).getLatitude());
-                Double lon = (double) (addresses.get(0).getLongitude());
-
-                travel.setDestinetionLatitude(lat);
-                travel.setDestinetionlongitude(lon);
-
-            }
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        FireBase_DBDriver.stopNotifyToTravelsList();
     }
+
+
 
 }

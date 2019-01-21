@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/nav_f1"
+        android:title="Fragment1">
+    </item>
+
+    <item android:id="@+id/nav_f2"
+        android:title="Fragment2">
+    </item>
+
+    <item android:id="@+id/nav_f3"
+        android:title="Fragment3">
+    </item>
+
+</menu>

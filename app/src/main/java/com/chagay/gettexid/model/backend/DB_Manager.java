@@ -12,7 +12,8 @@ public interface DB_Manager {
     public List<Driver> getAllTheDrivers();
     public String addDriver(Driver driver);
     public boolean checkIfDriverAdded(String id);
-    public List<Travel> untreatedTravels();
+
+    public List<Travel>  untreatedTravels();
     public List<Travel> endedTravels();
     public List<Travel> travelsByDriver(Driver driver);
     public List<Travel> untreatedTravelsInDestinationCity(String city);

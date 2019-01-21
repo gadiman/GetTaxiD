@@ -171,6 +171,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             }
         }
         return false;
+
     }
 
     private boolean ValidateSubmitButton() {

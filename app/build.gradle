@@ -47,6 +47,7 @@ dependencies {
     implementation 'me.spark:submitbutton:1.0.1'
     implementation 'com.google.gms:google-services:4.0.0'
 
+    implementation 'com.android.support:cardview-v7:27.1.1'
 }
 
 apply plugin: 'com.google.gms.google-services'

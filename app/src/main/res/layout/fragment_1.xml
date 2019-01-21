@@ -1,42 +1,99 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+    android:layout_width="fill_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-    tools:context="com.chagay.gettexid.controller.FreeTravelsFragment">
+    tools:context="com.chagay.gettexid.controller.MainActivityNavigation">
+
 
     <!-- TODO: Update blank fragment layout -->
-
-
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/layout_bg_rounded"
-    />
+        />
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="30dp"
-        android:orientation="horizontal"
-        android:background="@drawable/layout_bg_rounded_">
 
+        <ListView
+            android:id="@+id/listViewTravels"
+            android:layout_width="fill_parent"
+            android:layout_height="370dp"/>
+
+
+
+
+<LinearLayout
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/layout_bg_rounded_"
+    android:orientation="vertical">
         <TextView
-            android:id="@+id/textView4"
+            android:id="@+id/textView3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Travel Information:"
+            android:textSize="20dp"/>
+    >
+
+
+<LinearLayout
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_gravity="bottom"
+    android:gravity="center_horizontal|bottom"
+    android:layout_marginBottom="5dp"
+    android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/callButtom"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="   Fillter By:" />
+            android:background="@drawable/layout_button_color_rounded"
+            android:textColor="@color/blue_"
+            android:text="call" />
 
-        <TextView
-            android:id="@+id/textView5"
+        <Button
+            android:id="@+id/startDriveButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="   jdjdj:" />
+            android:layout_marginLeft="2dp"
+            android:background="@drawable/layout_button_color_rounded"
+            android:textColor="@color/blue_"
+            android:text="Start Drive" />
 
+
+        <Button
+            android:id="@+id/smsButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="2dp"
+            android:background="@drawable/layout_button_color_rounded"
+            android:textColor="@color/blue_"
+            android:text="send sms" />
+
+        <Button
+            android:id="@+id/mailButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="2dp"
+            android:background="@drawable/layout_button_color_rounded"
+            android:textColor="@color/blue_"
+            android:text="mail" />
+</LinearLayout>
+
+
+</LinearLayout>
 
     </LinearLayout>
 
 
 
-</LinearLayout>
+
+
+
+
+

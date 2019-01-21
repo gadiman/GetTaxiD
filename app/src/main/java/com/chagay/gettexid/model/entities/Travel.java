@@ -16,10 +16,10 @@ public class Travel {
     private String driverID;
     private String destinetionCityName;
     private double intialLocationLatitude;
-    private double initialLocationlongitude;
+    private double initialLocationLongitude;
     private double destinetionLatitude;
-    private double destinetionlongitude;
-    private long  id;
+    private double destinetionLongitude;
+    private String  id;
 
     //---------------------------------- Constructors ----------------------------------//
 
@@ -103,11 +103,11 @@ public class Travel {
         this.travel_status = travel_status;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -137,12 +137,12 @@ public class Travel {
         this.intialLocationLatitude = intialLocationLatitude;
     }
 
-    public double getInitialLocationlongitude() {
-        return initialLocationlongitude;
+    public double getInitialLocationLongitude() {
+        return initialLocationLongitude;
     }
 
-    public void setInitialLocationlongitude(double initialLocationlongitude) {
-        this.initialLocationlongitude = initialLocationlongitude;
+    public void setInitialLocationLongitude(double initialLocationLongitude) {
+        this.initialLocationLongitude = initialLocationLongitude;
     }
 
 
@@ -154,12 +154,12 @@ public class Travel {
         this.destinetionLatitude = destinetionLatitude;
     }
 
-    public double getDestinetionlongitude() {
-        return destinetionlongitude;
+    public double getDestinetionLongitude() {
+        return destinetionLongitude;
     }
 
-    public void setDestinetionlongitude(double destinetionlongitude) {
-        this.destinetionlongitude = destinetionlongitude;
+    public void setDestinetionLongitude(double destinetionLongitude) {
+        this.destinetionLongitude = destinetionLongitude;
     }
 
 

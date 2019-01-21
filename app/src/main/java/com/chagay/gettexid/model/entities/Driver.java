@@ -13,6 +13,8 @@ public class Driver {
     String driverEmailAddress;
     String creditCard;
     long id;
+    private double Longitude;
+    private double Latitude;
 
     //---------------------------------- Constructors ----------------------------------//
 
@@ -26,6 +28,7 @@ public class Driver {
         this.driverPhoneNumber = driverPhoneNumber;
         this.driverEmailAddress = driverEmailAddress;
         this.creditCard = creditCard;
+
 
     }
 
@@ -106,5 +109,24 @@ public class Driver {
     public void setId(long id) {
         this.id = id;
     }
+
+
+    public double getLongitude() {
+        return Longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        Longitude = longitude;
+    }
+
+    public double getLatitude() {
+        return Latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        Latitude = latitude;
+    }
+
+
 
 }
