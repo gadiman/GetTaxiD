@@ -1,6 +1,5 @@
 package com.chagay.gettexid.model.backend;
 
-import android.content.ContentValues;
 import android.location.Location;
 import com.chagay.gettexid.model.entities.Driver;
 import com.chagay.gettexid.model.entities.Travel;
@@ -12,8 +11,12 @@ public interface DB_Manager {
     public List<Driver> getAllTheDrivers();
     public String addDriver(Driver driver);
     public boolean checkIfDriverAdded(String id);
-
-    public List<Travel>  untreatedTravels();
+    public Driver getCurrentDriver();
+    public String updateTravelDetails(String key, String driverId);
+    public String updateTravelFinish(String key);
+    public void resetAll();
+    public Boolean thereIsPreviousTrip(String id);
+    public List<Travel>  untreatedTravels(String id);
     public List<Travel> endedTravels();
     public List<Travel> travelsByDriver(Driver driver);
     public List<Travel> untreatedTravelsInDestinationCity(String city);

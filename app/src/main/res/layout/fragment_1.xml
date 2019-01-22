@@ -13,8 +13,27 @@
         android:id="@+id/toolbar1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/layout_bg_rounded"
-        />
+        android:background="@drawable/layout_bg_rounded">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+
+        <EditText
+            android:id="@+id/filterDestination"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Filter by destination"
+            android:layout_marginRight="10dp"
+             />
+
+
+
+        </LinearLayout>
+    </android.support.v7.widget.Toolbar>
+
+
 
 
         <ListView
@@ -35,9 +54,66 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="Travel Information:"
-            android:textSize="20dp"/>
-    >
+            android:textStyle="bold"
+            android:text="Travel Information:" />
+<LinearLayout
+    android:layout_width="fill_parent"
+    android:layout_height="20dp"
+    android:orientation="horizontal">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:text=" Customer name: "
+        />
+
+    <TextView
+        android:id="@+id/customer_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+      />
+</LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="20dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:text=" Initial address: "/>
+
+        <TextView
+            android:id="@+id/initial_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+           />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="20dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:text=" Destination : "/>
+
+        <TextView
+            android:id="@+id/destination"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+           />
+    </LinearLayout>
+
+
+
+
 
 
 <LinearLayout
@@ -48,6 +124,8 @@
     android:layout_marginBottom="5dp"
     android:orientation="horizontal">
 
+
+
         <Button
             android:id="@+id/callButtom"
             android:layout_width="wrap_content"
@@ -56,33 +134,43 @@
             android:textColor="@color/blue_"
             android:text="call" />
 
-        <Button
-            android:id="@+id/startDriveButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="2dp"
-            android:background="@drawable/layout_button_color_rounded"
-            android:textColor="@color/blue_"
-            android:text="Start Drive" />
+    <Button
+        android:id="@+id/smsButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/layout_button_color_rounded"
+        android:textColor="@color/blue_"
+        android:text="sms" />
 
 
-        <Button
-            android:id="@+id/smsButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="2dp"
-            android:background="@drawable/layout_button_color_rounded"
-            android:textColor="@color/blue_"
-            android:text="send sms" />
 
         <Button
             android:id="@+id/mailButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="2dp"
             android:background="@drawable/layout_button_color_rounded"
             android:textColor="@color/blue_"
             android:text="mail" />
+
+    <Button
+        android:id="@+id/startDriveButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/layout_button_color_rounded"
+        android:textColor="@color/blue_"
+        android:text="Take" />
+
+    <Button
+        android:id="@+id/finishTravel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/layout_button_color_rounded"
+        android:textColor="@color/blue_"
+        android:text="Finish" />
+
+
+
+
 </LinearLayout>
 
 

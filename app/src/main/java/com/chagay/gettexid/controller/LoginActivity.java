@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.chagay.gettexid.R;
 import com.chagay.gettexid.model.backend.DB_Manager;
 import com.chagay.gettexid.model.backend.FactoryMethod;
+import com.chagay.gettexid.model.datasource.FireBase_DBDriver;
 import com.chagay.gettexid.model.entities.Driver;
 
 import java.util.List;
@@ -79,9 +80,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         List<Driver> drivers= manager.getAllTheDrivers();
         for (Driver it:drivers) {
             if(it.getDriverUserName().equals(user) && it.getPassword().equals(pass)){
+                FireBase_DBDriver.NotifyCurrentDriver(it.getDriverID());
+                manager.resetAll();
                 return true;
             }
         }
+        manager.resetAll();
         return false;
     }
 

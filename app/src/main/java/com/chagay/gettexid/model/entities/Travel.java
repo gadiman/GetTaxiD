@@ -10,6 +10,7 @@ public class Travel {
     private String endLocation;
     private String startTravelTime;
     private String endTravelTime;
+    private String dateOfTravel;
     private String customerName;
     private String customerPhoneNumber;
     private String customerEmailAddress;
@@ -161,6 +162,15 @@ public class Travel {
     public void setDestinetionLongitude(double destinetionLongitude) {
         this.destinetionLongitude = destinetionLongitude;
     }
+
+    public String getDateOfTravel() {
+        return dateOfTravel;
+    }
+
+    public void setDateOfTravel(String dateOfTravel) {
+        this.dateOfTravel = dateOfTravel;
+    }
+
 
 
 

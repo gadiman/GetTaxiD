@@ -1,8 +1,11 @@
 package com.chagay.gettexid.controller;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Typeface;
 import android.location.Location;
 import android.support.annotation.NonNull;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,10 +15,15 @@ import android.widget.Filterable;
 import android.widget.TextView;
 
 import com.chagay.gettexid.R;
+import com.chagay.gettexid.model.backend.DB_Manager;
+import com.chagay.gettexid.model.backend.FactoryMethod;
+import com.chagay.gettexid.model.entities.Driver;
 import com.chagay.gettexid.model.entities.Travel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.regex.Pattern;
 
 public  class TravelsListViewAdapter extends ArrayAdapter<Travel> implements Filterable {
 
@@ -24,8 +32,9 @@ public  class TravelsListViewAdapter extends ArrayAdapter<Travel> implements Fil
     private Context context;
     private List<Travel> TravelList;
     private List<Travel> origTravelList;
-
-    private LayoutInflater.Filter planetFilter;
+    private Filter planetFilter;
+    List<Travel> nTravelList;
+    DB_Manager manager = FactoryMethod.getManager();
 
 
 
@@ -56,6 +65,7 @@ public  class TravelsListViewAdapter extends ArrayAdapter<Travel> implements Fil
     }
 
 
+    @SuppressLint("SetTextI18n")
     @NonNull
     @Override
     public View getView(int position, View convertView, @NonNull ViewGroup parent) {
@@ -73,14 +83,18 @@ public  class TravelsListViewAdapter extends ArrayAdapter<Travel> implements Fil
             viewHolder.item1 = (TextView) convertView.findViewById(R.id.row_item1);
             viewHolder.item2 = (TextView) convertView.findViewById(R.id.row_item2);
 
+
             convertView.setTag(viewHolder); // view lookup cache stored in tag
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
         // Populate the data into the template view using the data object
-        viewHolder.item1.setText("Destination: "+travel.getDestinetionCityName());
-        viewHolder.item2.setText("Distance: "+ String.valueOf(calculateDistance(travel)) +" Km");
+        String Destination =String.format( "<b>" + "Destination: " + "</b> %s",travel.getDestinetionCityName());
+        String Distance =String.format( "<b>" + "Distance: " + "</b> %s",String.valueOf(calculateDistance(travel)) +" Km");
+
+        viewHolder.item1.setText(Html.fromHtml(Destination));
+        viewHolder.item2.setText(Html.fromHtml(Distance));
         // Return the completed view to render on screen
         return convertView;
     }
@@ -102,16 +116,14 @@ public  class TravelsListViewAdapter extends ArrayAdapter<Travel> implements Fil
 
     @Override
     public Filter getFilter() {
-        if (planetFilter == null) //Filter claSS
-            planetFilter = (LayoutInflater.Filter) new PlanetFilter();
+        if (planetFilter == null) //Filter class
+            planetFilter = new PlanetFilter();
 
         return (Filter) planetFilter;
     }
 
 
-    private class PlanetFilter extends Filter {
-
-
+    private class PlanetFilter extends Filter  {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
             FilterResults results = new FilterResults();
@@ -122,14 +134,11 @@ public  class TravelsListViewAdapter extends ArrayAdapter<Travel> implements Fil
                 results.count = origTravelList.size();
             } else {
                 // We perform filtering operation
-                   List<Travel> nTravelList = new ArrayList<Travel>();
-                    int j = 0;
+                nTravelList = new ArrayList<Travel>();
+
                     for (Travel it : TravelList) {
-                        j++;
                         if (it.getDestinetionCityName().toUpperCase().startsWith(constraint.toString().toUpperCase())) {
                             nTravelList.add(it);
-
-                            int i = 3;
                         }
                     }
 
@@ -154,18 +163,47 @@ public  class TravelsListViewAdapter extends ArrayAdapter<Travel> implements Fil
 
         }
 
+        public void filter(String charText) {
+            charText = charText.toLowerCase(Locale.getDefault());
+            if (charText.length() == 0) {
+                TravelList = origTravelList;
+
+            } else {
+                nTravelList = new ArrayList<Travel>();
+                int Km;
+                boolean isNumber = Pattern.matches("[0-9]+", charText);
+                if(isNumber) {
+                    Km = Integer.parseInt(charText);
+                    for (Travel it : TravelList) {
+                        if (calculateDistance(it) <= (Km)) {
+                            nTravelList.add(it);
+                        }
+                    }
+                    TravelList = nTravelList;
+
+                }
+                else
+                    TravelList = origTravelList;
+            }
+            notifyDataSetChanged();
+        }
+
     }
 
-    private static int calculateDistance(Travel travel) {
+    private  int calculateDistance(Travel travel) {
+
+        Driver driver = manager.getCurrentDriver();
+        double a = driver.getLongitude();
+        double b = driver.getLatitude();
+
+
         Location locationA = new Location("point A");
-        double a = travel.getInitialLocationLongitude();
-        double b = travel.getIntialLocationLatitude();
         locationA.setLatitude(b);
         locationA.setLongitude(a);
 
         Location locationB = new Location("point B");
-        double a_ = travel.getDestinetionLongitude();
-        double b_ = travel.getDestinetionLatitude();
+        double a_ = travel.getInitialLocationLongitude();
+        double b_ = travel.getIntialLocationLatitude();
 
         locationB.setLatitude(b_);
         locationB.setLongitude(a_);

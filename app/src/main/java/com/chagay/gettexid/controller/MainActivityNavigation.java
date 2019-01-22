@@ -32,6 +32,8 @@ import android.widget.Toast;
 
 
 import com.chagay.gettexid.R;
+import com.chagay.gettexid.model.backend.DB_Manager;
+import com.chagay.gettexid.model.backend.FactoryMethod;
 import com.chagay.gettexid.model.datasource.FireBase_DBDriver;
 import com.chagay.gettexid.model.entities.Driver;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -59,7 +61,7 @@ public class MainActivityNavigation extends AppCompatActivity {
     LocationListener locationListener;
     public Criteria criteria;
     public String bestProvider;
-    Driver driver = new Driver();
+    Driver driver = FactoryMethod.getManager().getCurrentDriver();
 
     private DrawerLayout dl;
     private ActionBarDrawerToggle t;
@@ -68,12 +70,16 @@ public class MainActivityNavigation extends AppCompatActivity {
     private static int fragment = 0;
     FreeTravelsFragment fragment1 = new FreeTravelsFragment();
     SelectedTravelsFragment fragment2 = new SelectedTravelsFragment();
+    DB_Manager manager;
+
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //startService(new Intent(this, FirebaseBackgroundService.class));
         setContentView(R.layout.activity_main_navigation);
+        manager = FactoryMethod.getManager();
 
         getLocation();
 
@@ -175,7 +181,10 @@ public class MainActivityNavigation extends AppCompatActivity {
                         driver.setLongitude(location.getLongitude());
                         return true;
                     } else {
-                        locationManager.requestLocationUpdates(bestProvider, 0, 0, locationListener);
+                        try {
+                            locationManager.requestLocationUpdates(bestProvider, 0, 0, locationListener);
+                        }catch (Exception ex)
+                        {}
                     }
                 }
                 else {
@@ -240,6 +249,9 @@ public class MainActivityNavigation extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
+
+
 
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

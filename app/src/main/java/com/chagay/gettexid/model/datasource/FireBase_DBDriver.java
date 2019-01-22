@@ -57,6 +57,7 @@ public class  FireBase_DBDriver extends Activity implements DB_Manager  {
     static List<Travel> TravelList;
     static List<Travel> FreeTravelList;
     static List<Driver> DriverList;
+    static Driver currentDriver;
 
 
     static {
@@ -203,6 +204,13 @@ public class  FireBase_DBDriver extends Activity implements DB_Manager  {
     }
 
 
+    public static void NotifyCurrentDriver(String id)
+    {
+        for (Driver it:DriverList) {
+            if(id == it.getDriverID())
+                currentDriver = it;
+        }
+    }
 
 
 
@@ -226,6 +234,43 @@ public class  FireBase_DBDriver extends Activity implements DB_Manager  {
         return id == FirebaseDatabase.getInstance().getReference("Drivers").child(id).getKey();
     }
 
+    @Override
+    public Driver getCurrentDriver() {
+        return currentDriver;
+    }
+
+    @Override
+    public String updateTravelDetails(String key, String driverId) {
+
+       TravelRef.child(key).child("driverID").setValue(driverId);
+       TravelRef.child(key).child("travel_status").setValue(Travel.TRAVEL_STATUS.OCCUPIED);
+
+        return TravelRef.child(key).child(driverId).getKey();
+    }
+
+    @Override
+    public String updateTravelFinish(String key) {
+        TravelRef.child(key).child("travel_status").setValue(Travel.TRAVEL_STATUS.FINISHED);
+        return TravelRef.child(key).child("travel_status").getKey();
+    }
+
+    @Override
+    public void resetAll() {
+        stopNotifyToTravelsList();
+        stopNotifyToDriversList();
+        TravelList.clear();
+        DriverList.clear();
+    }
+
+    @Override
+    public Boolean thereIsPreviousTrip(String id) {
+        for (Travel it:TravelList) {
+            if(it.getDriverID()!= null && it.getDriverID().equals(id) &&
+                    it.getTravel_status() == Travel.TRAVEL_STATUS.OCCUPIED)
+                return true;
+        }
+            return false;
+    }
 
 
     @Override
@@ -239,13 +284,13 @@ public class  FireBase_DBDriver extends Activity implements DB_Manager  {
      }
 
     @Override
-    public List<Travel> untreatedTravels() {
+    public List<Travel> untreatedTravels(String id) {
         if (TravelList == null)
             return null;
 
         FreeTravelList.clear();
         for (Travel it : TravelList) {
-            if (it.getTravel_status() == Travel.TRAVEL_STATUS.AVAILABLE) {
+            if (it.getTravel_status() == Travel.TRAVEL_STATUS.AVAILABLE ||it.getId().equals(id)) {
                 FreeTravelList.add(it);
             }
         }
