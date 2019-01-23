@@ -23,4 +23,5 @@ public interface DB_Manager {
     public List<Travel> untreatedTravelsByDistance(double distance);
     public List<Travel> travelsByDate(Date date);
     public List<Travel> travelsByPayment(double payment);
+    public List<Travel> finishedTravels(String id);
 }

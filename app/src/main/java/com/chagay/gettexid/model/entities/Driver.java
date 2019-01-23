@@ -29,7 +29,6 @@ public class Driver {
         this.driverEmailAddress = driverEmailAddress;
         this.creditCard = creditCard;
 
-
     }
 
     public Driver() {
