@@ -77,7 +77,7 @@ public class MainActivityNavigation extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //startService(new Intent(this, FirebaseBackgroundService.class));
+        startService(new Intent(this, FirebaseBackgroundService.class));
         setContentView(R.layout.activity_main_navigation);
         manager = FactoryMethod.getManager();
 
