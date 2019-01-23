@@ -74,7 +74,7 @@ public class FinishedTravelsAdapter extends ArrayAdapter<Travel> implements Filt
 
         // Populate the data into the template view using the data object
         String destination = String.format( "<b>" + "Destination: " + "</b> %s", travel.getDestinetionCityName() );
-        String date = String.format( "<b>" + "Distance: " + "</b> %s", travel.getDateOfTravel() );
+        String date = String.format( "<b>" + "Date: " + "</b> %s", travel.getDateOfTravel() );
 
         viewHolder.item1.setText( Html.fromHtml( destination ) );
         viewHolder.item2.setText( Html.fromHtml( date ) );
