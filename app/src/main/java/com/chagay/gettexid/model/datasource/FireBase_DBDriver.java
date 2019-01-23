@@ -300,6 +300,21 @@ public class  FireBase_DBDriver extends Activity implements DB_Manager  {
         return FreeTravelList;
     }
 
+    @Override
+    public List<Travel> finishedTravels(String id){
+        if (TravelList==null)
+            return null;
+
+        List<Travel> finishedTravel=new ArrayList<Travel>();
+        for (Travel it:TravelList){
+            if (it.getDriverID()==id)
+                finishedTravel.add( it );
+        }
+        return finishedTravel;
+
+    }
+
+
 
     @Override
     public List<Travel> endedTravels() {
