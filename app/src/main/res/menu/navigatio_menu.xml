@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/nav_f1"
-        android:title="Fragment1">
+        android:title="Free Travels">
     </item>
 
     <item android:id="@+id/nav_f2"
-        android:title="Fragment2">
+        android:title="Travel Made">
     </item>
 
     <item android:id="@+id/nav_f3"
-        android:title="Fragment3">
+        android:title="Exit">
     </item>
 
 </menu>

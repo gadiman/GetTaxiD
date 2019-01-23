@@ -20,7 +20,7 @@ public interface DB_Manager {
     public List<Travel> endedTravels();
     public List<Travel> travelsByDriver(Driver driver);
     public List<Travel> untreatedTravelsInDestinationCity(String city);
-    public List<Travel> untreatedTravelsByDistance(double distance, Location location);
+    public List<Travel> untreatedTravelsByDistance(double distance);
     public List<Travel> travelsByDate(Date date);
     public List<Travel> travelsByPayment(double payment);
 }

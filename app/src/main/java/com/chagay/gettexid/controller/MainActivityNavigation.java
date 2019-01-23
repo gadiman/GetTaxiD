@@ -83,6 +83,7 @@ public class MainActivityNavigation extends AppCompatActivity {
 
         getLocation();
 
+
         dl = (DrawerLayout) findViewById(R.id.activity_main_);
         t = new ActionBarDrawerToggle(this, dl, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
             public void onDrawerClosed(View view) {
@@ -126,6 +127,7 @@ public class MainActivityNavigation extends AppCompatActivity {
 
         });
 
+        loadFragment(fragment1);
     }
 
     @Override

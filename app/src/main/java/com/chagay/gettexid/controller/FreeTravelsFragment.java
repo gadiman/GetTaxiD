@@ -4,12 +4,20 @@ package com.chagay.gettexid.controller;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.ContentProviderOperation;
+import android.content.ContentProviderResult;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.OperationApplicationException;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.RemoteException;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v4.content.ContextCompat;
@@ -57,15 +65,16 @@ public  class FreeTravelsFragment extends Fragment {
     TextView InitialAddress;
     TextView Destination;
     EditText filterByDestination;
-    EditText filterByDistance;
     Button callButton;
     Button startDriveButton;
     Button smsButton;
     Button mailButton;
     Button finishButton;
+    Button addContantButton;
     int PositionclickLst;
     Travel travel;
     String travlTakedID = "";
+    boolean contentP = false;
     boolean isConnectionCreate = false;
     boolean isTravelTaked = false;
 
@@ -116,14 +125,19 @@ public  class FreeTravelsFragment extends Fragment {
     private void setListeners(View viewA) {
         mailButton.setOnClickListener(new View.OnClickListener() {
 
+
+
             @Override
             public void onClick(View v) {
-                isConnectionCreate =true;
-                Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
-                        "mailto",Travels.get(PositionclickLst).getCustomerEmailAddress(), null));
-                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Subject");
-                emailIntent.putExtra(Intent.EXTRA_TEXT, "Body");
-                startActivity(Intent.createChooser(emailIntent, "Send email..."));
+                if(Travels.size() != 0)
+                {
+                    isConnectionCreate = true;
+                    Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+                            "mailto", Travels.get(PositionclickLst).getCustomerEmailAddress(), null));
+                    emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Subject");
+                    emailIntent.putExtra(Intent.EXTRA_TEXT, "Body");
+                    startActivity(Intent.createChooser(emailIntent, "Send email..."));
+                }
             }
         });
 
@@ -131,14 +145,16 @@ public  class FreeTravelsFragment extends Fragment {
         smsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (Travels.size() != 0) {
 
-                isConnectionCreate =true;
-                // send sms intent
-                String phoneNumber = Travels.get(PositionclickLst).getCustomerPhoneNumber().toString();
-                Uri uri = Uri.parse("smsto:"+"+972"+phoneNumber);
-                Intent intent = new Intent(Intent.ACTION_SENDTO, uri);
-                intent.putExtra("sms_body", "HI I am your driver, I come to pick you up");
-                startActivity(intent);
+                    isConnectionCreate = true;
+                    // send sms intent
+                    String phoneNumber = Travels.get(PositionclickLst).getCustomerPhoneNumber().toString();
+                    Uri uri = Uri.parse("smsto:" + "+972" + phoneNumber);
+                    Intent intent = new Intent(Intent.ACTION_SENDTO, uri);
+                    intent.putExtra("sms_body", "HI I am your driver, I come to pick you up");
+                    startActivity(intent);
+                }
 
             }
         });
@@ -147,11 +163,13 @@ public  class FreeTravelsFragment extends Fragment {
         callButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                isConnectionCreate =true;
-                Log.d(TAG, " callButton");
-                String phoneNumber = Travels.get(PositionclickLst).getCustomerPhoneNumber().toString();
-                Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", "+972" + phoneNumber, null));
-                startActivity(intent);
+                if(Travels.size() != 0) {
+                    isConnectionCreate = true;
+                    Log.d(TAG, " callButton");
+                    String phoneNumber = Travels.get(PositionclickLst).getCustomerPhoneNumber().toString();
+                    Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", "+972" + phoneNumber, null));
+                    startActivity(intent);
+                }
 
             }
         });
@@ -160,48 +178,47 @@ public  class FreeTravelsFragment extends Fragment {
             @SuppressLint("StaticFieldLeak")
             @Override
             public void onClick(View v) {
-                if(!isTravelTaked){
-                    Toast.makeText( getActivity(), "Take the travel before", Toast.LENGTH_SHORT ).show();
+                if(Travels.size() != 0) {
+
+                    if (!isTravelTaked) {
+                        Toast.makeText(getActivity(), "Take the travel before", Toast.LENGTH_SHORT).show();
+                    } else {
+                        isTravelTaked = false;
+                        isConnectionCreate = false;
+                        travlTakedID = "";
+
+                        new AsyncTask<Void, Void, Boolean>() {
+
+                            @Override
+                            protected Boolean doInBackground(Void... voids) {
+                                String id = db_manager.updateTravelFinish(Travels.get(PositionclickLst).getId());
+
+                                return id.equals(Travels.get(PositionclickLst).getTravel_status().toString());
+                            }
+
+                            protected void onPostExecute(Boolean f) {
+                                super.onPostExecute(f);
+
+                                Travels.get(PositionclickLst).setTravel_status(Travel.TRAVEL_STATUS.OCCUPIED);
+                                Travels.get(PositionclickLst).setDriverID(db_manager.getCurrentDriver().getDriverID());
+
+                                Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT+2:00"));
+                                Date currentLocalTime = cal.getTime();
+                                DateFormat date = new SimpleDateFormat("HH:mm");
+                                date.setTimeZone(TimeZone.getTimeZone("GMT+2:00"));
+                                String localTime = date.format(currentLocalTime);
+
+                                Travels.get(PositionclickLst).setEndTravelTime(localTime);
+                                Travels.get(PositionclickLst).setDateOfTravel(new SimpleDateFormat("dd-mm-yyyy", Locale.getDefault()).format(new Date()));
+                                Travels = db_manager.untreatedTravels(travlTakedID);
+                                travelsListViewAdapter.notifyDataSetChanged();
+
+
+                            }
+
+                        }.execute();
+                    }
                 }
-                else {
-                    isTravelTaked = false;
-                    isConnectionCreate = false;
-                    travlTakedID = "";
-
-                    new AsyncTask<Void, Void, Boolean>() {
-
-                        @Override
-                        protected Boolean doInBackground(Void... voids) {
-                            String id = db_manager.updateTravelFinish(Travels.get(PositionclickLst).getId());
-
-                            return id.equals(Travels.get(PositionclickLst).getTravel_status().toString());
-                        }
-
-                        protected void onPostExecute(Boolean f) {
-                            super.onPostExecute(f);
-
-                            Travels.get(PositionclickLst).setTravel_status(Travel.TRAVEL_STATUS.OCCUPIED);
-                            Travels.get(PositionclickLst).setDriverID(db_manager.getCurrentDriver().getDriverID());
-
-                            Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT+2:00"));
-                            Date currentLocalTime = cal.getTime();
-                            DateFormat date = new SimpleDateFormat("HH:mm");
-                            date.setTimeZone(TimeZone.getTimeZone("GMT+2:00"));
-                            String localTime = date.format(currentLocalTime);
-
-                            Travels.get(PositionclickLst).setEndTravelTime(localTime);
-                            Travels.get(PositionclickLst).setDateOfTravel(new SimpleDateFormat("dd-mm-yyyy", Locale.getDefault()).format(new Date()));
-                            Travels = db_manager.untreatedTravels(travlTakedID);
-                            travelsListViewAdapter.notifyDataSetChanged();
-
-
-
-
-                        }
-
-                    }.execute();
-                }
-
 
 
             }
@@ -213,38 +230,40 @@ public  class FreeTravelsFragment extends Fragment {
             @SuppressLint("StaticFieldLeak")
             @Override
             public void onClick(View v) {
-                isTravelTaked=true;
-                String driverID = db_manager.getCurrentDriver().getDriverID();
+                if (Travels.size() != 0) {
 
-                if(!isConnectionCreate){
-                    Toast.makeText( getActivity(), "Contact customer before", Toast.LENGTH_SHORT ).show();
-                }
-                else if(db_manager.thereIsPreviousTrip(driverID)){
-                    Toast.makeText( getActivity(), "Finish previous travel before", Toast.LENGTH_SHORT ).show();
 
-                }
-                else {
-                    new AsyncTask<Void, Void, Boolean>() {
+                    String driverID = db_manager.getCurrentDriver().getDriverID();
 
-                        @Override
-                        protected Boolean doInBackground(Void... voids) {
-                            String result = db_manager.updateTravelDetails(Travels.get(PositionclickLst).getId(), driverID);
-                            return result.equals(driverID);
-                        }
+                    if (!isConnectionCreate) {
+                        Toast.makeText(getActivity(), "Contact customer before", Toast.LENGTH_SHORT).show();
+                    } else if (db_manager.thereIsPreviousTrip(driverID)) {
+                        Toast.makeText(getActivity(), "Finish previous travel before", Toast.LENGTH_SHORT).show();
 
-                        protected void onPostExecute(Boolean aBoolean) {
-                            super.onPostExecute(aBoolean);
-                            if (aBoolean) {
-                                Toast.makeText(getActivity(), "Take travel successful", Toast.LENGTH_SHORT).show();
-                                travlTakedID = Travels.get(PositionclickLst).getId();
-                                Travels.get(PositionclickLst).setTravel_status(Travel.TRAVEL_STATUS.OCCUPIED);
-                                Travels.get(PositionclickLst).setDriverID(db_manager.getCurrentDriver().getDriverID());
-                            } else
-                                Toast.makeText(getActivity(), "Error please try again", Toast.LENGTH_SHORT).show();
+                    } else {
+                        isTravelTaked = true;
+                        new AsyncTask<Void, Void, Boolean>() {
 
-                        }
-                    }.execute();
+                            @Override
+                            protected Boolean doInBackground(Void... voids) {
+                                String result = db_manager.updateTravelDetails(Travels.get(PositionclickLst).getId(), driverID);
+                                return result.equals(driverID);
+                            }
 
+                            protected void onPostExecute(Boolean aBoolean) {
+                                super.onPostExecute(aBoolean);
+                                if (aBoolean) {
+                                    Toast.makeText(getActivity(), "Take travel successful", Toast.LENGTH_SHORT).show();
+                                    travlTakedID = Travels.get(PositionclickLst).getId();
+                                    Travels.get(PositionclickLst).setTravel_status(Travel.TRAVEL_STATUS.OCCUPIED);
+                                    Travels.get(PositionclickLst).setDriverID(db_manager.getCurrentDriver().getDriverID());
+                                } else
+                                    Toast.makeText(getActivity(), "Error please try again", Toast.LENGTH_SHORT).show();
+
+                            }
+                        }.execute();
+
+                    }
                 }
             }
         });
@@ -255,18 +274,21 @@ public  class FreeTravelsFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-
-                travel=(Travel)((ListView) parent).getAdapter().getItem(position);
-
-                PositionclickLst= Travels.indexOf(travel);
+                if(Travels.size() != 0) {
 
 
-                custumerName = (TextView) viewA.findViewById(R.id.customer_name);
-                custumerName.setText(travel.getCustomerName());
-                InitialAddress=  (TextView) viewA.findViewById(R.id.initial_address);
-                InitialAddress.setText(travel.getStartLocation());
-                Destination =  (TextView) viewA.findViewById(R.id.destination);
-                Destination.setText(travel.getEndLocation());
+                    travel = (Travel) ((ListView) parent).getAdapter().getItem(position);
+
+                    PositionclickLst = Travels.indexOf(travel);
+
+
+                    custumerName = (TextView) viewA.findViewById(R.id.customer_name);
+                    custumerName.setText(travel.getCustomerName());
+                    InitialAddress = (TextView) viewA.findViewById(R.id.initial_address);
+                    InitialAddress.setText(travel.getStartLocation());
+                    Destination = (TextView) viewA.findViewById(R.id.destination);
+                    Destination.setText(travel.getEndLocation());
+                }
             }
         });
 
@@ -292,6 +314,91 @@ public  class FreeTravelsFragment extends Fragment {
         });
 
 
+        addContantButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
+                // adb.setView(alertDialogView);
+                adb.setTitle("Are you sure that you want to add this traveler to your contacts?");
+                adb.setMessage("Name: "+Travels.get(PositionclickLst).getCustomerName()+"\nPhone: "+Travels.get(PositionclickLst).getCustomerPhoneNumber());
+                adb.setIcon(android.R.mipmap.sym_def_app_icon);
+                adb.setPositiveButton("ADD", new DialogInterface.OnClickListener() {
+                    @RequiresApi(api = Build.VERSION_CODES.M)
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        addContact(getActivity(),Travels.get(PositionclickLst).getCustomerName(),Travels.get(PositionclickLst).getCustomerPhoneNumber());
+                        Toast.makeText(getActivity(),  " added to Contact" , Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+                adb.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+                adb.show();
+
+            }
+        });
+
+
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private  void addContact (Context ctx , String displayName, String phoneNumber )
+    {
+
+        if(contentP) {
+
+            ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
+            int rawContactInsertIndex = ops.size();
+
+            ops.add(ContentProviderOperation.newInsert(ContactsContract.RawContacts.CONTENT_URI)
+                    .withValue(ContactsContract.RawContacts.ACCOUNT_TYPE, null)
+                    .withValue(ContactsContract.RawContacts.ACCOUNT_NAME, null).build());
+
+            //Phone Number
+            ops.add(ContentProviderOperation
+                    .newInsert(ContactsContract.Data.CONTENT_URI)
+                    .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID,
+                            rawContactInsertIndex)
+                    .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE)
+                    .withValue(ContactsContract.CommonDataKinds.Phone.NUMBER, phoneNumber)
+                    .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE)
+                    .withValue(ContactsContract.CommonDataKinds.Phone.TYPE, "1").build());
+
+            //Display name/Contact name
+            ops.add(ContentProviderOperation
+                    .newInsert(ContactsContract.Data.CONTENT_URI)
+                    .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID,
+                            rawContactInsertIndex)
+                    .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE)
+                    .withValue(ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME, displayName)
+                    .build());
+
+
+// Asking the Contact provider to create a new contact
+
+            // Executing all the insert operations as a single database transaction
+            // getContext().getApplicationContext().getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops);
+// Asking the Contact provider to create a new contact
+            try {
+                ContentProviderResult[] res = getActivity().getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops);
+                Log.d(TAG, "added contact");
+
+            } catch (RemoteException e) {
+                Log.d(TAG, "no added contact");
+
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (OperationApplicationException e) {
+
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+        else
+            getPermissionToReadUserContacts();
 
     }
 
@@ -302,6 +409,7 @@ public  class FreeTravelsFragment extends Fragment {
         mailButton=(Button) view.findViewById(R.id.mailButton);
         finishButton = (Button) view.findViewById(R.id.finishTravel);
         filterByDestination = (EditText) view.findViewById(R.id.filterDestination);
+        addContantButton = (Button) view.findViewById(R.id.AddContent);
     }
 
 
@@ -344,6 +452,7 @@ public  class FreeTravelsFragment extends Fragment {
             if (grantResults.length == 1 &&
                     grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Toast.makeText(getActivity(), "Read Contacts permission granted", Toast.LENGTH_SHORT).show();
+                contentP =true;
             } else {
                 // showRationale = false if user clicks Never Ask Again, otherwise true
                 boolean showRationale = shouldShowRequestPermissionRationale(  Manifest.permission.READ_CONTACTS);

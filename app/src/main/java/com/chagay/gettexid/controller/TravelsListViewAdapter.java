@@ -163,30 +163,6 @@ public  class TravelsListViewAdapter extends ArrayAdapter<Travel> implements Fil
 
         }
 
-        public void filter(String charText) {
-            charText = charText.toLowerCase(Locale.getDefault());
-            if (charText.length() == 0) {
-                TravelList = origTravelList;
-
-            } else {
-                nTravelList = new ArrayList<Travel>();
-                int Km;
-                boolean isNumber = Pattern.matches("[0-9]+", charText);
-                if(isNumber) {
-                    Km = Integer.parseInt(charText);
-                    for (Travel it : TravelList) {
-                        if (calculateDistance(it) <= (Km)) {
-                            nTravelList.add(it);
-                        }
-                    }
-                    TravelList = nTravelList;
-
-                }
-                else
-                    TravelList = origTravelList;
-            }
-            notifyDataSetChanged();
-        }
 
     }
 

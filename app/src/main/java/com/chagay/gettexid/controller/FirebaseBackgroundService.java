@@ -1,5 +1,6 @@
 package com.chagay.gettexid.controller;
 
+import android.app.ActivityManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -99,7 +100,7 @@ public class FirebaseBackgroundService extends Service {
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setContentTitle("A new travel jest added")
-                .setContentText("New travel at" + notifString)
+                .setContentText("New travel to" + notifString)
                 .setSmallIcon(R.drawable.ic_taxi);
 
         Intent resultIntent = new Intent(this, MainActivityNavigation.class);
@@ -112,21 +113,11 @@ public class FirebaseBackgroundService extends Service {
 
         notificationManager.notify(NOTIFICATION_ID, builder.build());
 
-       /* NotificationCompat.Builder notification = (NotificationCompat.Builder) new NotificationCompat.Builder(this)
-                .setContentTitle("A new travel jest added")
-                .setContentText("New travel at" + notifString)
-                .setSmallIcon(R.drawable.ic_taxi);
-        Intent intent_ = new Intent(this, MainActivityNavigation.class);
-        PendingIntent pIntent_ = PendingIntent.getActivity(this,0, intent_, PendingIntent.FLAG_UPDATE_CURRENT);
-        notification.setContentIntent(pIntent_);
-        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-        mNotificationManager.notify(0,notification.build());
-
-     */
 
 
 
     }
+
+
 
 }

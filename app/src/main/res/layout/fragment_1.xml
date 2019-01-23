@@ -124,12 +124,16 @@
     android:layout_marginBottom="5dp"
     android:orientation="horizontal">
 
+    <TableLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
+    <TableRow android:layout_gravity="center">
 
         <Button
             android:id="@+id/callButtom"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
             android:background="@drawable/layout_button_color_rounded"
             android:textColor="@color/blue_"
             android:text="call" />
@@ -137,7 +141,7 @@
     <Button
         android:id="@+id/smsButton"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="30dp"
         android:background="@drawable/layout_button_color_rounded"
         android:textColor="@color/blue_"
         android:text="sms" />
@@ -147,15 +151,17 @@
         <Button
             android:id="@+id/mailButton"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
             android:background="@drawable/layout_button_color_rounded"
             android:textColor="@color/blue_"
             android:text="mail" />
-
+    </TableRow>
+        <TableRow android:layout_gravity="center"
+            android:layout_marginTop="6dp">
     <Button
         android:id="@+id/startDriveButton"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="30dp"
         android:background="@drawable/layout_button_color_rounded"
         android:textColor="@color/blue_"
         android:text="Take" />
@@ -163,12 +169,20 @@
     <Button
         android:id="@+id/finishTravel"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="30dp"
         android:background="@drawable/layout_button_color_rounded"
         android:textColor="@color/blue_"
         android:text="Finish" />
 
-
+          <Button
+              android:id="@+id/AddContent"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:background="@drawable/layout_button_color_rounded"
+                android:textColor="@color/blue_"
+                android:text="Add content" />
+        </TableRow>
+    </TableLayout>
 
 
 </LinearLayout>

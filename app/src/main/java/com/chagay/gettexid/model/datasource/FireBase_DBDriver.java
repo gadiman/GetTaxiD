@@ -9,9 +9,11 @@ import com.chagay.gettexid.model.entities.Travel;
 import com.google.firebase.database.*;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 
 public class  FireBase_DBDriver extends Activity implements DB_Manager  {
@@ -51,7 +53,7 @@ public class  FireBase_DBDriver extends Activity implements DB_Manager  {
         void onDataChanged(T obj);
         void onFailure(T obj );
     }
-
+    final int Pay =5;
     static DatabaseReference TravelRef;
     static DatabaseReference DriverRef;
     static List<Travel> TravelList;
@@ -338,18 +340,36 @@ public class  FireBase_DBDriver extends Activity implements DB_Manager  {
     }
 
     @Override
-    public List<Travel> untreatedTravelsByDistance(double distance, Location location) {
-        return null;
+    public List<Travel> untreatedTravelsByDistance(double distance) {
+        List<Travel> tmp = new ArrayList<>();
+        for (Travel it:FreeTravelList) {
+            if (calculateDistance(it) <= distance)
+                tmp.add(it);
+        }
+        return tmp;
     }
 
     @Override
     public List<Travel> travelsByDate(Date date) {
-        return null;
+
+        List<Travel> tmp = new ArrayList<>();
+        for (Travel it:TravelList) {
+            if (new SimpleDateFormat("dd-mm-yyyy", Locale.getDefault()).format(date).equals(it.getDateOfTravel()))
+                tmp.add(it);
+        }
+
+        return tmp;
     }
 
     @Override
     public List<Travel> travelsByPayment(double payment) {
-        return null;
+        List<Travel> tmp = new ArrayList<>();
+        for (Travel it:FreeTravelList) {
+            if (calculateDistance(it)* Pay <= payment )
+                tmp.add(it);
+        }
+        return tmp;
+
     }
 
     @Override
@@ -358,6 +378,30 @@ public class  FireBase_DBDriver extends Activity implements DB_Manager  {
         FireBase_DBDriver.stopNotifyToTravelsList();
     }
 
+
+
+    private  int calculateDistance(Travel travel) {
+
+        Driver driver = getCurrentDriver();
+        double a = driver.getLongitude();
+        double b = driver.getLatitude();
+
+
+        Location locationA = new Location("point A");
+        locationA.setLatitude(b);
+        locationA.setLongitude(a);
+
+        Location locationB = new Location("point B");
+        double a_ = travel.getInitialLocationLongitude();
+        double b_ = travel.getIntialLocationLatitude();
+
+        locationB.setLatitude(b_);
+        locationB.setLongitude(a_);
+
+
+
+        return Math.round(locationA.distanceTo(locationB)/1000);
+    }
 
 
 }
