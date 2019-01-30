@@ -119,6 +119,8 @@ public class SelectedTravelsFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
+                finishedTravelsAdapter.notifyDataSetChanged();
+
 
             }
         });

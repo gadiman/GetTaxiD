@@ -82,7 +82,7 @@ public class FirebaseBackgroundService extends Service {
 
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-
+            //starting from android 8 we have use Channel
 
             CHANNEL_ID = "my_channel_01";
             CharSequence name = "my_channel";
@@ -103,7 +103,7 @@ public class FirebaseBackgroundService extends Service {
                 .setContentText("New travel to" + notifString)
                 .setSmallIcon(R.drawable.ic_taxi);
 
-        Intent resultIntent = new Intent(this, MainActivityNavigation.class);
+        Intent resultIntent = new Intent(this, LoginActivity.class);
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
         stackBuilder.addParentStack(LoginActivity.class);
         stackBuilder.addNextIntent(resultIntent);

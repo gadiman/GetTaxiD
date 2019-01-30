@@ -3,10 +3,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TableRow>
+    <TableRow
+         >
     <TextView
         android:id="@+id/row_item1"
-        android:layout_width="250dp"
+        android:layout_width="230dp"
         android:layout_height="50dp"
         android:layout_column="0"
         android:layout_marginLeft="5dp"

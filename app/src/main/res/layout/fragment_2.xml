@@ -33,7 +33,7 @@
     <ListView
         android:id="@+id/listViewFinishedTravels"
         android:layout_width="fill_parent"
-        android:layout_height="370dp"
+        android:layout_height="fill_parent"
         />
 
 

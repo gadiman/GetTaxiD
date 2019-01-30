@@ -74,7 +74,7 @@ public class FinishedTravelsAdapter extends ArrayAdapter<Travel> implements Filt
 
         // Populate the data into the template view using the data object
         String destination = String.format( "<b>" + "Destination: " + "</b> %s", travel.getDestinetionCityName() );
-        String date = String.format( "<b>" + "Date: " + "</b> %s", travel.getDateOfTravel() );
+        String date = String.format( "<b>" + "Phone: " + "</b> %s", travel.getCustomerPhoneNumber() );
 
         viewHolder.item1.setText( Html.fromHtml( destination ) );
         viewHolder.item2.setText( Html.fromHtml( date ) );
@@ -119,7 +119,7 @@ public class FinishedTravelsAdapter extends ArrayAdapter<Travel> implements Filt
                 nTravelList = new ArrayList<Travel>();
 
                 for (Travel it : TravelList) {
-                    if (calculateTravelDistance(it)<= Integer.parseInt(constraint.toString()) ) {
+                    if (calculateTravelDistance(it) <= Integer.parseInt(constraint.toString()) ) {
                         nTravelList.add( it );
                     }
                 }
@@ -144,26 +144,26 @@ public class FinishedTravelsAdapter extends ArrayAdapter<Travel> implements Filt
 
         }
 
+        private int calculateTravelDistance(Travel travel) {
 
+            double locationLatitude = travel.getIntialLocationLatitude();
+            double locationLongitude = travel.getInitialLocationLongitude();
+
+
+            Location locationA = new Location( "point A" );
+            locationA.setLatitude( locationLatitude );
+            locationA.setLongitude( locationLongitude );
+
+            double destinetionLatitude = travel.getDestinetionLatitude();
+            double destinetionLongitude = travel.getDestinetionLongitude();
+
+            Location locationB = new Location( "point B" );
+            locationB.setLatitude( destinetionLatitude );
+            locationB.setLongitude( destinetionLongitude );
+
+
+            return Math.round( locationA.distanceTo( locationB ) / 1000 );
+        }
     }
-    private int calculateTravelDistance(Travel travel) {
 
-        double locationLatitude = travel.getIntialLocationLatitude();
-        double locationLongitude = travel.getInitialLocationLongitude();
-
-
-        Location locationA = new Location( "point A" );
-        locationA.setLatitude( locationLatitude );
-        locationA.setLongitude( locationLongitude );
-
-        double destinetionLatitude = travel.getDestinetionLatitude();
-        double destinetionLongitude = travel.getDestinetionLongitude();
-
-        Location locationB = new Location( "point B" );
-        locationB.setLatitude( destinetionLatitude );
-        locationB.setLongitude( destinetionLongitude );
-
-
-        return Math.round( locationA.distanceTo( locationB ) / 1000 );
-    }
 }

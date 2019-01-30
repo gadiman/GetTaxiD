@@ -58,6 +58,7 @@ public class  FireBase_DBDriver extends Activity implements DB_Manager  {
     static DatabaseReference DriverRef;
     static List<Travel> TravelList;
     static List<Travel> FreeTravelList;
+    static List<Travel> FinishTravelList;
     static List<Driver> DriverList;
     static Driver currentDriver;
 
@@ -305,12 +306,11 @@ public class  FireBase_DBDriver extends Activity implements DB_Manager  {
         if (TravelList==null)
             return null;
 
-        List<Travel> finishedTravel=new ArrayList<Travel>();
         for (Travel it:TravelList){
-            if (it.getDriverID()==id)
-                finishedTravel.add( it );
+            if (it.getDriverID() != null && it.getDriverID().equals(id))
+                FreeTravelList.add( it );
         }
-        return finishedTravel;
+        return FreeTravelList;
 
     }
 
